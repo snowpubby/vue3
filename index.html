@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app">
+      <h3>add:{{add()}}</h3>
+      <h3>add:{{add()}}</h3>
+      <h3>sum:{{sum}}</h3>
+      <h3>sum:{{sum}}</h3>
+      x:<input type="text" v-model.number="data.x"/><br>
+      y:<input type="text" v-model.number="data.y"/><br>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+    <!-- <script type="module">
+      import { createApp,ref,reactive,computed } from 'vue'
+
+      createApp({
+        setup() {
+          const data = ref({
+            x:10,
+            y:20
+          });
+          let add = () => {
+            console.log("add")
+            return data.value.x + data.value.y
+          }
+          const sum = computed(() => {
+            console.log("sum")
+            return data.value.x + data.value.y
+          })
+          return {
+            data,
+            add,
+            sum
+          }
+        }
+      }).mount('#app')
+    </script> -->
+  </body>
+</html>
