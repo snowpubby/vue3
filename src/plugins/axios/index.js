@@ -3,11 +3,15 @@ import axios from 'axios';
 import {useUserStore} from '@/stores/user.js'; // 假设你有一个Vuex store用于存储token等信息
 import { ElMessage } from 'element-plus'; // 或者你使用的其他UI库的消息提示组件
 
+
+
 // 创建axios实例并配置基础URL和其他默认设置
 const service = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 5000, // 请求超时时间
 });
+service.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+service.defaults.headers['clientid'] = import.meta.env.VITE_APP_CLIENT_ID;
 
 // 请求拦截器 - 添加Token等公共请求头
 service.interceptors.request.use(
@@ -15,7 +19,7 @@ service.interceptors.request.use(
     const store = useUserStore();
     const token = store.user && store.user.token; // 从Vuex store获取token
     if (token) {
-      config.headers.token = `${token}`; // 添加Authorization header
+      config.headers['Authorization'] = 'Bearer ' + `${token}`; // 添加Authorization header
     }
     return config;
   },

@@ -1,37 +1,14 @@
 import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router';
+import {useUserStore} from '@/stores/user.js'
+import {getRouters} from '@/api/index.js'
+
 const routeList = [
     {
         path: '/',
-        alias:["/home","/index"],
-        component: () => import('@/views/index.vue'),
+        component: () => import('@/views/Layout.vue'),
     },{
         path: '/login',
         component: () => import('@/views/login.vue')
-    },{
-        path: '/content',
-        component: () => import('@/views/content.vue'),
-    },{
-        path: "/user/:id/name/:name",
-        component: () => import('@/views/user.vue'),
-    },{
-        path: "/userHistory/:id/name/:name?",
-        name: "history",
-        component: () => import('@/views/user.vue'),
-    },{
-        path: '/vip',
-        component: () => import('@/views/vip.vue'),
-        children: [//子路由
-        {
-            path: '',//默认页
-            component: () => import('@/views/vip/default.vue')
-        },{
-            path: 'list',//列表页
-            component: () => import('@/views/vip/list.vue')
-        },{
-            path: 'detail',//详情页
-            component: () => import('@/views/vip/detail.vue')
-        }
-    ]
     }
 ]
 const router = createRouter({
@@ -39,4 +16,40 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes:routeList
 })
+router.beforeEach(async (to, from, next) => {
+    const userStore = useUserStore();
+    if (to.path === '/login') {
+        console.log('跳转到login')
+        next();
+    } else if (typeof(userStore.user.token)=='undefined' || userStore.user.token == "") {
+        console.log('token不存在，跳转到login')
+        next({path: '/login', query:{redirect: to.fullPath}});
+    } else {
+        console.log('跳转到:', to.fullPath)
+        //加载路由菜单
+        console.log('isInitRoute', userStore.user.isInitRoute)
+        if (!userStore.user.isInitRoute) {
+            console.log('加载路由菜单')
+            await initRoute()
+            userStore.setIsInitRoute(true)
+            next({...to, replace: true})
+        } else {
+            next()
+        }
+    }
+})
+const initRoute = async () => {
+    const routes = await getRouters()
+    //添加到router
+    //添加侧边菜单栏
+    console.log('添加菜单栏')
+    const route0 = routes[0]
+
+    router.addRoute({
+        path: route0.path,
+        name: route0.name,
+        component: () => import(`@/views/${route0.component}.vue`)
+    });
+    console.log('添加成功')
+};
 export default router;

@@ -5,23 +5,26 @@ export const  useUserStore = defineStore("user", () => {
     const user = reactive({
         token: '',
         info: '',
-        zones: []
+        menus: [],
+        isInitRoute: false
     });
 
-    const setToken = (token) => {
-        user.token = token;
-    };
     const setInfo = (info) => {
         user.info = info;
+        user.token = info.access_token
     }
-    const setZones = (zones) => {
-        user.zones = zones;
+    const setMenus = (menus) => {
+        user.menus = menus
     }
-    return { user, setToken, setInfo, setZones }
-
-}, {
-    persist: {
-        storage: localStorage,
-        key: 'user'
+    const setIsInitRoute = (isInitRoute) => {
+        user.isInitRoute = isInitRoute
     }
-});
+    return { user, setInfo, setMenus, setIsInitRoute }
+}
+);
+// }, {
+//     persist: {
+//         storage: localStorage,
+//         key: 'user'
+//     }
+// });
