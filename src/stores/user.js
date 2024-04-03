@@ -20,11 +20,11 @@ export const  useUserStore = defineStore("user", () => {
         user.isInitRoute = isInitRoute
     }
     return { user, setInfo, setMenus, setIsInitRoute }
-}
-);
-// }, {
-//     persist: {
-//         storage: localStorage,
-//         key: 'user'
-//     }
-// });
+// }
+// );
+}, {
+    persist: {
+        storage: localStorage,
+        key: 'user'
+    }
+});

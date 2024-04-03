@@ -1,6 +1,6 @@
 <!-- src/layouts/MainLayout.vue -->
 <template>
-    <el-container class="common-layout">
+    <el-container class="common-layout" style="height: 100%">
         <!-- 头部区域 -->
         <el-header>
             <span>this is header</span>
@@ -22,7 +22,7 @@
         </el-header>
 
         <!-- 左侧菜单栏 -->
-        <el-container>
+        <el-container style="height: 100%;">
             <el-aside :width="isCollapse ? '64px' : '200px'">
                 <div class="goggle-button" @click="toggleCollapse">|||</div>
                 <el-menu active-text-color="#409Eff" background-color="#545c64" text-color="#fff" unique-opened
@@ -32,6 +32,7 @@
             </el-aside>
             <!-- 右侧内容主体区域 -->
             <el-main>
+                main page
                 <!-- 路由占位符 -->
                 <router-view></router-view>
             </el-main>
@@ -43,34 +44,9 @@
 import menuTree from '@/components/menuTree.vue';
 import { ref } from 'vue';
 import { ElHeader, ElMenu, ElMenuItem, ElSlider, ElMain, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus';
+import { useUserStore } from '@/stores/user';
 
-interface MenuItem {
-    index: string;
-    label: string;
-    icon: string;
-    children: MenuItem[];
-    path: string;
-}
-
-const menuItems: MenuItem[] = [{
-    index: '125',
-    label: '用户管理',
-    icon: 'iconfont icon-users',
-    children: [{
-        index: '125-1',
-        label: '用户列表',
-        icon: 'iconfont icon-users',
-        path: '/user/list',
-        children: []
-    }],
-    path: ''
-}, {
-    index: '125',
-    label: '需求管理',
-    icon: 'iconfont icon-requirements',
-    children: [],
-    path: ''
-}]; // 填充菜单数据
+const menuItems = useUserStore().user.menus;
 const activeMenuIndex = ref('');
 const dropdownVisible = ref(false);
 const userAvatar = ref('https://sqt-1259302042.cos.ap-guangzhou.myqcloud.com/09fcafa6faa84602ada0eb371bf9da86.jpg'); // 用户头像地址
